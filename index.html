@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Abel|Oxygen:400,300' rel='stylesheet' type='text/css'>
+  <style>
+
+  body {
+    font-family: 'Oxygen', sans-serif;
+    font-weight: lighter;
+    margin: 10%;
+    font-size: 18px;
+    background-color: #fff;
+    color: #404040;
+  }
+
+  h2 {
+    font-family: "Tahoma";
+    font-weight: lighter;
+
+  }
+
+  button {
+  }
+
+  </style>
+</head>
+<body>
+<h2>Re: Meeting Agenda</h2>
+<button id="generate25">25 Words</button>
+<button id="generate100">100 Words</button>
+  <button id="generate1000">1000 Words</button><br />
+
+  <p>Team,</p>
+  <p id="out"></p>
+
+<script>
+
+
+// Writes to the output textbox
+function set(v) { document.getElementById('out').innerHTML = v; }
+
+// Holds the state information
+var cache = {
+    '_START': []
+};
+
+var buzz = function () {
+    // Get the source text and split it into words
+    var words = "This is a request to sync up concerning the recent catalyst that will address both low-hanging fruit and lead to disruptive innovation. We need to implement our synergy to synthesize latest findings in order to pivot toward version 2.0. Our cadence since the SOW happy path was released deserves a retro, and we need to triage the backlog in order to swarm and unpack recent changes. Feel free to loop in any other stakeholders. We will continue to touch base, but I will time box the meetings in order to reach maximum velocity in our work.";
+
+    var text = words.split(/\s+/g);
+
+    if (!text.length)
+        return;
+
+    // Add it to the start node's list of possibility
+    cache['_START'].push(text[0]);
+
+    // Now go through each word and add it to the previous word's node
+    for (var i = 0; i < text.length - 1; i++) {
+        if (!cache[text[i]])
+            cache[text[i]] = [];
+        cache[text[i]].push(text[i + 1]);
+
+        // If it's the beginning of a sentence, add the next word to the start node too
+        if (text[i].match(/\.$/))
+            cache['_START'].push(text[i + 1]);
+    }
+};
+
+buzz();
+
+document.getElementById('generate25').onclick = function () {
+    // Start with the root node
+    var currentWord = '_START';
+    var str = '';
+
+    // Generate 300 words of text
+    for (var i = 0; i < 25; i++) {
+
+        // Follow a random node, append it to the string, and move to that node
+        var rand = Math.floor(Math.random() * cache[currentWord].length);
+        str += cache[currentWord][rand];
+
+        // No more nodes to follow? Start again. (Add a period to make things look better.)
+        if (!cache[cache[currentWord][rand]]) {
+            currentWord = '_START';
+            if (!cache[currentWord][rand].match(/\.$/))
+                str += '. ';
+            else
+                str += ' ';
+        } else {
+            currentWord = cache[currentWord][rand];
+            str += ' ';
+        }
+    }
+    set(str);
+}
+
+document.getElementById('generate100').onclick = function () {
+    // Start with the root node
+    var currentWord = '_START';
+    var str = '';
+
+    // Generate 300 words of text
+    for (var i = 0; i < 100; i++) {
+
+
+        // Follow a random node, append it to the string, and move to that node
+        var rand = Math.floor(Math.random() * cache[currentWord].length);
+        str += cache[currentWord][rand];
+
+        // No more nodes to follow? Start again. (Add a period to make things look better.)
+        if (!cache[cache[currentWord][rand]]) {
+            currentWord = '_START';
+            if (!cache[currentWord][rand].match(/\.$/))
+                str += '. ';
+            else
+                str += ' ';
+        } else {
+            currentWord = cache[currentWord][rand];
+            str += ' ';
+        }
+    }
+    set(str);
+}
+
+document.getElementById('generate1000').onclick = function () {
+    // Start with the root node
+    var currentWord = '_START';
+    var str = '';
+
+    // Generate 300 words of text
+    for (var i = 0; i < 1000; i++) {
+
+
+        // Follow a random node, append it to the string, and move to that node
+        var rand = Math.floor(Math.random() * cache[currentWord].length);
+        str += cache[currentWord][rand];
+
+        // No more nodes to follow? Start again. (Add a period to make things look better.)
+        if (!cache[cache[currentWord][rand]]) {
+            currentWord = '_START';
+            if (!cache[currentWord][rand].match(/\.$/))
+                str += '. ';
+            else
+                str += ' ';
+        } else {
+            currentWord = cache[currentWord][rand];
+            str += ' ';
+        }
+    }
+    set(str);
+}
+</script>
+</body>
+</html>
